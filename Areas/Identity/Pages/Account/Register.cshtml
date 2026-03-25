@@ -1,0 +1,70 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register New Staff/Admin";
+}
+
+<div class="container mt-4">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h2>Create a new internal account.</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <label asp-for="Input.Email">Email Address</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.Role" asp-items="@(ViewData["Roles"] as SelectList)" class="form-select" aria-required="true">
+                        <option disabled selected value="">--- Select System Role ---</option>
+                    </select>
+                    <label asp-for="Input.Role">Assigned Role</label>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.BranchId" asp-items="Model.BranchList" class="form-control">
+                        <option value="">-- Select Branch --</option>
+                    </select>
+                    <label asp-for="Input.BranchId">Assign to Branch</label>
+                    <span asp-validation-for="Input.BranchId" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.Password">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Create User Account</button>
+            </form>
+        </div>
+
+        <div class="col-md-5 offset-md-1">
+            <div class="alert alert-info mt-4">
+                <h4>Role Permissions</h4>
+                <ul>
+                    <li><strong>Admin:</strong> Full access to Students, Financials, and User Management.</li>
+                    <li><strong>Staff:</strong> Can manage Enrollments and Students, but cannot manage users or sensitive settings.</li>
+                </ul>
+                <p><small>Note: New users must verify their email before they can access role-protected features.</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

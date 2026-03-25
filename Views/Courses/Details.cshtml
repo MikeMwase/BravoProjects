@@ -1,0 +1,48 @@
+﻿@model BravoProjects.Models.Course
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>Details</h1>
+
+<div class="card shadow-sm border-0 bg-light p-4">
+    <h4>Course Information</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3 fw-bold">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt class="col-sm-3 fw-bold">
+            @Html.DisplayNameFor(model => model.StandardFee)
+        </dt>
+        <dd class="col-sm-9 text-success fw-bold">
+            @Model.StandardFee.ToString("C")
+        </dd>
+
+        @* --- NEW EXPENSE FIELD --- *@
+        <dt class="col-sm-3 fw-bold text-danger">
+            @Html.DisplayNameFor(model => model.CourseExpense)
+        </dt>
+        <dd class="col-sm-9 text-danger">
+            @Model.CourseExpense.ToString("C")
+        </dd>
+
+        @* --- CALCULATED MARGIN --- *@
+        <dt class="col-sm-3 fw-bold border-top mt-2 pt-2">
+            Net Profit (Per Student)
+        </dt>
+        <dd class="col-sm-9 border-top mt-2 pt-2 fw-bold text-primary">
+            @((Model.StandardFee - Model.CourseExpense).ToString("C"))
+        </dd>
+    </dl>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning shadow-sm">Edit Settings</a>
+    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Back to List</a>
+</div>

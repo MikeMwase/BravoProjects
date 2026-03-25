@@ -1,0 +1,88 @@
+﻿@model BravoProjects.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Enrollment Details";
+    // Calculate the remaining balance here
+    decimal amountRemaining = (Model.Course?.StandardFee ?? 0) - Model.AmountPaid;
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Enrollment Statement</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            Student Name
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Student.FirstName @Model.Student.LastName
+        </dd>
+
+        <dt class="col-sm-3">
+            Course Title
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Course.Title)
+        </dd>
+
+        <dt class="col-sm-3">
+            Enrollment Date
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Date.ToString("dd MMMM yyyy")
+        </dd>
+
+        <dt class="col-sm-3">
+            Receipt Number
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.ReceiptNo)
+        </dd>
+
+        <dt class="col-sm-3">
+            Method of Payment
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.MethodOfPayment)
+        </dd>
+
+        <dt class="col-sm-3">
+            Status
+        </dt>
+        <dd class="col-sm-9">
+            <span class="badge @(amountRemaining <= 0 ? "bg-success" : "bg-warning text-dark")">
+                @Html.DisplayFor(model => model.PaymentStatus)
+            </span>
+        </dd>
+
+        <hr />
+
+        <dt class="col-sm-3">
+            Total Course Fee
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Course.StandardFee.ToString("C")
+        </dd>
+
+        <dt class="col-sm-3">
+            Amount Paid
+        </dt>
+        <dd class="col-sm-9 text-success">
+            @Model.AmountPaid.ToString("C")
+        </dd>
+
+        <dt class="col-sm-3 font-weight-bold">
+            Amount Remaining
+        </dt>
+        <dd class="col-sm-9 font-weight-bold @(amountRemaining > 0 ? "text-danger" : "text-success")">
+            @amountRemaining.ToString("C")
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit Payment</a> |
+    <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">Delete Enrollment</a> |
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

@@ -1,0 +1,54 @@
+﻿@model BravoProjects.Models.Enrollment
+
+@{
+    decimal totalPaid = ViewBag.TotalPaid;
+}
+
+<div class="card-body">
+    <div class="alert alert-info border-0 shadow-sm d-flex justify-content-between align-items-center">
+        <span>Current Credit from @Model.Course.Title:</span>
+        <strong class="fs-5">@totalPaid.ToString("C")</strong>
+    </div>
+
+    <form asp-action="ChangeCourse" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="enrollmentId" value="@Model.Id" />
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Select New Course</label>
+            <select name="newCourseId" id="newCourseSelect" class="form-select form-select-lg" required>
+                <option value="" data-fee="0">-- Select Course --</option>
+
+                <optgroup label="Fully Covered by Credit (R0.00 Due)">
+                    @foreach (var c in ((List<Course>)ViewBag.AvailableCourses).Where(x => x.StandardFee <= totalPaid))
+                    {
+                        <option value="@c.Id" data-fee="@c.StandardFee">
+                            @c.Title (@c.StandardFee.ToString("C")) @(c.StandardFee == totalPaid ? "- EXACT MATCH" : "")
+                        </option>
+                    }
+                </optgroup>
+
+                <optgroup label="Requires Additional Payment">
+                    @foreach (var c in ((List<Course>)ViewBag.AvailableCourses).Where(x => x.StandardFee > totalPaid))
+                    {
+                        <option value="@c.Id" data-fee="@c.StandardFee">
+                            @c.Title (@c.StandardFee.ToString("C")) - Needs @((c.StandardFee - totalPaid).ToString("C"))
+                        </option>
+                    }
+                </optgroup>
+            </select>
+        </div>
+
+        <div id="pricePreview" class="alert d-none">
+            <div class="d-flex justify-content-between border-top pt-1 fw-bold">
+                <span id="diffLabel">Result:</span>
+                <span id="diffAmount"></span>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Complete Swap</button>
+            <a asp-action="Details" asp-route-id="@Model.StudentId" class="btn btn-link">Cancel</a>
+        </div>
+    </form>
+</div>

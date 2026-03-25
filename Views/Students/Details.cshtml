@@ -1,0 +1,247 @@
+﻿@model BravoProjects.Models.Student
+
+@* 1. Alert Notifications for Actions *@
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Student Profile</h1>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> Edit Profile
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+@* 2. Personal Information Section *@
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="card-title text-muted border-bottom pb-2">Personal Information</h4>
+        <dl class="row mt-3">
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+            <dt class="col-sm-3">ID Number</dt>
+            <dd class="col-sm-9">@Model.IdNumber</dd>
+            <dt class="col-sm-3">Phone Number</dt>
+            <dd class="col-sm-9">@Model.PhoneNumber</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title border-bottom pb-2">Enrollment & Payment History</h4>
+
+        @* 3. Refund Credit Banner (Updated with "Use Credit" Option) *@
+        @foreach (var enrollment in Model.Enrollments)
+        {
+            decimal totalPaid = enrollment.PaymentRecords.Sum(p => p.AmountPaid);
+            decimal fee = enrollment.Course.StandardFee;
+
+            if (totalPaid > fee)
+            {
+                decimal creditAmount = totalPaid - fee;
+                <div class="alert alert-info shadow-sm mt-3 border-start border-4 border-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Credit Available:</strong> Overpayment of <strong>@creditAmount.ToString("C")</strong> detected for @enrollment.Course.Title.
+                        </div>
+                        <div class="btn-group">
+                            <form asp-action="ProcessRefund" method="post" onsubmit="return confirm('Confirm cash refund of @creditAmount.ToString("C")?');" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="studentId" value="@Model.Id" />
+                                <input type="hidden" name="amount" value="@creditAmount" />
+                                <input type="hidden" name="enrollmentId" value="@enrollment.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="bi bi-cash-stack"></i> Issue Cash Refund
+                                </button>
+                            </form>
+
+                            <button class="btn btn-sm btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#enrollWithCredit-@enrollment.Id">
+                                <i class="bi bi-journal-plus"></i> Use Credit for New Course
+                            </button>
+                        </div>
+                    </div>
+
+                    @* Hidden Enrollment Form for Credit Transfer *@
+                    @* Inside the collapse div for enrollWithCredit *@
+                    <div class="collapse mt-3 border-top pt-3" id="enrollWithCredit-@enrollment.Id">
+                        <form asp-action="EnrollWithCredit" method="post" class="row g-2 align-items-center">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="studentId" value="@Model.Id" />
+                            <input type="hidden" name="sourceEnrollmentId" value="@enrollment.Id" />
+
+                            <div class="col-md-4">
+                                <label class="small fw-bold">Manual Receipt #:</label>
+                                <input type="text" name="manualReceiptNo" class="form-control form-control-sm"
+                                       placeholder="e.g. #10019" required />
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="small fw-bold">Apply credit to:</label>
+                                <select name="newCourseId" class="form-select form-select-sm" required>
+                                    <option value="">-- Select New Course --</option>
+                                    @if (ViewBag.AllCourses != null)
+                                    {
+                                        foreach (var c in ((IEnumerable<BravoProjects.Models.Course>)ViewBag.AllCourses)
+                                        .Where(x => !Model.Enrollments.Any(e => e.CourseId == x.Id)))
+                                        {
+                                            <option value="@c.Id">@c.Title (@c.StandardFee.ToString("C"))</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 mt-4">
+                                <button type="submit" class="btn btn-sm btn-success w-100">Confirm Transfer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+
+        @* 4. Main Enrollment Table (Remains as you have it) *@
+        <table class="table table-hover mt-3">
+            @* ... (Rest of your table code here) *@
+        </table>
+
+        @* 4. Main Enrollment Table *@
+        <table class="table table-hover mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Registration Date</th>
+                    <th>Course Name</th>
+                    <th class="text-end">Total Paid</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in Model.Enrollments)
+                {
+                    decimal courseTotalPaid = enrollment.PaymentRecords.Sum(p => p.AmountPaid);
+                    decimal courseFee = enrollment.Course.StandardFee;
+                    decimal balanceDue = courseFee - courseTotalPaid;
+                    bool isFullyPaid = enrollment.PaymentStatus == "Paid";
+
+                    <tr class="table-light align-middle">
+                        <td>@enrollment.Date.ToShortDateString()</td>
+                        <td>
+                            <strong>@enrollment.Course.Title</strong><br />
+                            <small class="text-muted">Fee: @courseFee.ToString("C")</small>
+                        </td>
+                        <td class="text-end">
+                            <strong>@courseTotalPaid.ToString("C")</strong>
+
+                            @if (courseTotalPaid > courseFee)
+                            {
+                                decimal credit = courseTotalPaid - courseFee;
+                                <div class="small text-primary" style="font-size: 0.8rem; font-weight: bold;">
+                                    Credit: @credit.ToString("C")
+                                </div>
+                            }
+                            else if (balanceDue > 0)
+                            {
+                                <div class="small text-danger" style="font-size: 0.8rem;">
+                                    Balance: @balanceDue.ToString("C")
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="small text-success" style="font-size: 0.8rem;">Settled</div>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <span class="badge @(isFullyPaid ? "bg-success" : "bg-warning text-dark")">
+                                @enrollment.PaymentStatus
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group" role="group">
+                                @if (isFullyPaid && courseTotalPaid <= courseFee)
+                                {
+                                    <button class="btn btn-sm btn-light text-muted border" disabled>
+                                        <i class="bi bi-check-circle"></i> Fully Paid
+                                    </button>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Enrollments" asp-action="AddPayment" asp-route-id="@enrollment.Id" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-plus-lg"></i> Pay
+                                    </a>
+                                }
+
+                                <a asp-controller="Students" asp-action="ChangeCourse" asp-route-id="@enrollment.Id" class="btn btn-sm btn-outline-primary" title="Change Course">
+                                    <i class="bi bi-arrow-left-right"></i> Change
+                                </a>
+
+                                <form asp-controller="Students" asp-action="RemoveEnrollment" asp-route-id="@enrollment.Id" method="post"
+                                      onsubmit="return confirm('Are you sure? All payment history for this course will be deleted.');"
+                                      style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Remove Course">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    @* 5. Nested Payment History Table *@
+                    <tr class="bg-white">
+                        <td colspan="5" class="p-0 border-0">
+                            <table class="table table-sm table-borderless mb-0 w-100" style="background-color: #f8f9fa;">
+                                <thead>
+                                    <tr class="small text-muted border-bottom">
+                                        <th style="padding-left: 40px;">Payment Date</th>
+                                        <th>Receipt No</th>
+                                        <th>Method</th>
+                                        <th class="text-end pe-4">Amount Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var pay in enrollment.PaymentRecords.OrderBy(p => p.DatePaid))
+                                    {
+                                        <tr class="small">
+                                            <td style="width: 25%; padding-left: 40px;">@pay.DatePaid.ToString("dd MMM yyyy")</td>
+                                            <td style="width: 25%;">#@pay.ReceiptNo</td>
+                                            <td style="width: 25%;">@pay.PaymentMethod</td>
+                                            <td style="width: 25%;" class="text-end pe-4">@pay.AmountPaid.ToString("C")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot class="table-secondary">
+                <tr>
+                    <td colspan="2" class="text-end"><strong>Total Student Investment:</strong></td>
+                    <td class="text-end">
+                        <strong>
+                            @Model.Enrollments.SelectMany(e => e.PaymentRecords).Sum(p => p.AmountPaid).ToString("C")
+                        </strong>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

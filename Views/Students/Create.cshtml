@@ -1,0 +1,126 @@
+﻿@model BravoProjects.Models.Student
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Quick Register & Enroll</h4>
+        </div>
+        <div class="card-body">
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Error:</strong> Please check the Receipt Number.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div asp-validation-summary="All" class="small"></div>
+                </div>
+            }
+
+            <form asp-action="Create">
+                @* First Two Fields in a Row *@
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label fw-bold"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label fw-bold"></label>
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
+                </div>
+
+                @* Next Two Fields in a Row *@
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="IdNumber" class="form-label fw-bold"></label>
+                        <input asp-for="IdNumber" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                    </div>
+                </div>
+
+                @* Payment Info Row *@
+                <div class="row mb-4 bg-light p-2 rounded">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Receipt Number</label>
+                        <input name="receiptNo" class="form-control" placeholder="e.g. 3054" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Payment Method</label>
+                        <select name="methodOfPayment" class="form-select">
+                            <option value="CASH">CASH</option>
+                            <option value="CARD">CARD</option>
+                            <option value="EFT">EFT</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Amount Paid Now (R)</label>
+                        <input type="number" name="amountPaidNow" class="form-control" step="0.01" placeholder="0.00" />
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mb-3">Select Courses</h5>
+                @* Checkboxes: 4 per row *@
+                <div class="row g-3">
+                    @if (ViewBag.Courses != null)
+                    {
+                        foreach (var course in (IEnumerable<BravoProjects.Models.Course>)ViewBag.Courses)
+                        {
+                            <div class="col-md-3">
+                                <div class="form-check border p-2 rounded shadow-sm">
+                                    <input class="form-check-input ms-1" type="checkbox" name="selectedCourseIds" value="@course.Id" id="c_@course.Id">
+                                    <label class="form-check-label ms-2" for="c_@course.Id">
+                                        @course.Title <br />
+                                        <small class="text-muted">@course.StandardFee.ToString("C")</small>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="mt-4 pt-3 border-top text-end">
+                    <a asp-action="Index" class="btn btn-secondary me-2">Cancel</a>
+                    <button type="submit" class="btn btn-success px-5">Complete Registration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const checkboxes = document.querySelectorAll('input[name="selectedCourseIds"]');
+        const amountInput = document.querySelector('input[name="amountPaidNow"]');
+
+        function updateSuggestedTotal() {
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    // Extracting price from the <small> tag
+                    const priceText = cb.parentElement.querySelector('small').innerText;
+                    // Clean the R symbol and spaces for parsing
+                    const price = parseFloat(priceText.replace(/[^0-9,.]/g, '').replace(',', '.'));
+                    total += price;
+                }
+            });
+
+            // Only auto-fill if the user hasn't manually entered a value yet
+            // or if the value is currently 0
+            if (amountInput.value == "" || amountInput.value == "0" || amountInput.value == "0.00") {
+                amountInput.value = total.toFixed(2);
+            }
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateSuggestedTotal);
+        });
+    });
+</script>
+
