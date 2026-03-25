@@ -441,3 +441,4 @@ C:\Users\LENOVO\source\repos\BravoProjects\obj\Debug\net9.0\refint\BravoProjects
 C:\Users\LENOVO\source\repos\BravoProjects\obj\Debug\net9.0\BravoProjects.pdb
 C:\Users\LENOVO\source\repos\BravoProjects\obj\Debug\net9.0\BravoProjects.genruntimeconfig.cache
 C:\Users\LENOVO\source\repos\BravoProjects\obj\Debug\net9.0\ref\BravoProjects.dll
+C:\Users\LENOVO\source\repos\BravoProjects\obj\Debug\net9.0\BravoProjects.sourcelink.json

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BravoProjects")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ea70bbf3d4599e9aeffa5aed39fe4f30ccd4338")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ba55eadeeb83e8cea94e654c87171a246f199df")]
 [assembly: System.Reflection.AssemblyProductAttribute("BravoProjects")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BravoProjects")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

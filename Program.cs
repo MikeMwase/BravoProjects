@@ -24,7 +24,7 @@ namespace BravoProjects
 
             // Register DbContext
             builder.Services.AddDbContext<BravoProjectsDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("BravoConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add Identity Services
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)

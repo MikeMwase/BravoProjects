@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|c:\\users\\lenovo\\source\\repos\\bravoprojects\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|c:\\users\\lenovo\\source\\repos\\bravoprojects\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|c:\\users\\lenovo\\source\\repos\\bravoprojects\\views\\enrollments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{FD44AB1E-C438-4D96-99BE-6D4C338FC83B}|BravoProjects.csproj|solutionrelative:views\\enrollments\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -27,19 +35,45 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\Program.cs*",
+              "RelativeToolTip": "Program.cs*",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAmwBoAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-25T09:57:26.027Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\appsettings.json*",
+              "RelativeToolTip": "appsettings.json*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-25T08:51:40.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\Views\\Enrollments\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Enrollments\\Index.cshtml",
               "ToolTip": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\Views\\Enrollments\\Index.cshtml",
               "RelativeToolTip": "Views\\Enrollments\\Index.cshtml",
-              "ViewState": "AgIAAJ8AAAAAAAAAAAAmwKkAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAmwKkAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-03-24T14:53:41.862Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "EnrollmentsController.cs",
               "DocumentMoniker": "C:\\Users\\LENOVO\\source\\repos\\BravoProjects\\Controllers\\EnrollmentsController.cs",
               "RelativeDocumentMoniker": "Controllers\\EnrollmentsController.cs",
@@ -47,8 +81,7 @@
               "RelativeToolTip": "Controllers\\EnrollmentsController.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAwwBYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-24T14:52:13.936Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-24T14:52:13.936Z"
             }
           ]
         }
